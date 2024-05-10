@@ -1,0 +1,51 @@
+Dim previousColor As Long
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim cell As Range
+    Dim colorHex As String
+    Dim colorRGB As Long
+
+    Application.EnableEvents = False
+
+    For Each cell In Target
+        ' Check if the changed cell is within the specified range
+        If Not Intersect(cell, Me.Range("A1:IV144")) Is Nothing Then
+            ' Check if the cell value is a valid hexadecimal color
+            If IsHexColor(cell.Value) Then
+                ' Get the hex color value of the cell
+                colorHex = cell.Value
+
+                ' Convert hex color to RGB
+                colorRGB = CLng("&H" & Right(colorHex, 6))
+
+                ' Check if the new color is different from the previous color
+                If colorRGB <> previousColor Then
+                    ' Change cell background color
+                    cell.Interior.Color = RGB(colorRGB Mod 256, (colorRGB \ 256) Mod 256, (colorRGB \ 65536) Mod 256)
+
+                    ' Update the previous color for the next comparison
+                    previousColor = colorRGB
+                End If
+            End If
+        End If
+    Next cell
+
+    Application.EnableEvents = True
+End Sub
+
+Function IsHexColor(value As String) As Boolean
+    ' Check if the value starts with "#" and has exactly 6 hexadecimal characters
+    IsHexColor = Len(value) = 7 And Left(value, 1) = "#" And IsHex(Mid(value, 2))
+End Function
+
+Function IsHex(value As String) As Boolean
+    ' Check if the string is a valid hexadecimal number
+    Dim i As Integer
+    For i = 1 To Len(value)
+        If Not (Mid(value, i, 1) Like "[0-9A-Fa-f]") Then
+            IsHex = False
+            Exit Function
+        End If
+    Next i
+    IsHex = True
+End Function
