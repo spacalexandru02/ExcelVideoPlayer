@@ -1,3 +1,3 @@
 # **Excel Video Player**
 
-Am creat un program in python care reda video-uri de pe youtube in celule Excel. Pentru a rula programul ii dam url-ul videoului pe care vrem sa-l redam si rezolutia sa.
+I created a program in python that plays videos from youtube in Excel cells. To run the program, we give it the url of the video we want to play and its resolution.
